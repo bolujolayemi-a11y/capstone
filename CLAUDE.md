@@ -96,6 +96,31 @@ Before making significant changes:
 Do not invent APIs, dependencies, database schemas, or project requirements
 without stating the assumption.
 
+## Frontend-Specific Rules (Derived from FE-11 Workflow Drill)
+
+These rules were validated through a side-by-side comparison of vague vs. precise
+prompting. Violations of these rules should be caught in code review.
+
+1. **Data and logic separation is mandatory for testability.** Never hardcode
+   data in components. Export data and business logic (filter, search, transform)
+   as pure functions from a separate module (e.g., `evidence.js`). This enables
+   unit tests and reduces component complexity. Components should accept data
+   as props, not define it.
+
+2. **All user-facing counts, dynamic values, and content must derive from data,
+   not be hardcoded.** Use `.length`, derived calculations, or state—never static
+   strings. Examples: evidence count must be `visibleItems.length`, not
+   `"12 signals"`; empty state messaging should vary based on filter state
+   (e.g., "No evidence matches the current filters" vs. "No results").
+
+3. **All form controls and interactive states must expose ARIA semantics.**
+   Use `aria-pressed` (for toggle buttons), `aria-current` (for active nav links),
+   `aria-selected` (for selected items), `aria-label` (for icon buttons),
+   and `aria-atomic` (for live regions that update). Assume users will interact
+   via keyboard and screen readers. Never rely on CSS classes for state alone.
+   Missing fallback content (e.g., when descriptions are missing) must be
+   handled explicitly with sensible defaults like "Description unavailable."
+
 ## Current Development Stage
 
 The project is currently in the setup/planning stage.
